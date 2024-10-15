@@ -1,0 +1,2778 @@
+<!DOCTYPE html>
+<html lang="bg">
+<head>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
+  <title>TestoY</title>
+  
+  <!-- Page scripts -->
+  <script src="js/jquery.js" type="text/javascript"></script>
+  <script src="js/jquery.validate.js" type="text/javascript"></script>
+  <script src="js/forms.js" type="text/javascript"></script>
+  <script src="js/dr-dtime.js" type="text/javascript"></script>
+  <script src="js/moment-with-locales.js" type="text/javascript"></script>
+  
+  <!-- Page settings -->
+  <script>
+    let settingsObject = {
+      "country_code": "BG",
+      "BG": {
+        "name": "Bulgaria"
+      }
+    }
+    let defaultCountry = "BG";
+    let settings = {
+      "paketi": [
+        {
+          "quantity": 1,
+          "name": "1 = 37.5 LEV",
+          "oldPrice": "75 LEV",
+          "newPrice": "37.5 LEV"
+        },
+        {
+          "quantity": 2,
+          "name": "2 = ",
+          "oldPrice": "",
+          "newPrice": ""
+        },
+        {
+          "quantity": 2,
+          "name": "3 = ",
+          "oldPrice": "",
+          "newPrice": ""
+        }
+      ],
+      "phonePrefix": "+359"
+    }
+    let newPriceClass = "new-priceValue";
+    let oldPriceClass = "old-priceValue";
+  </script>
+  
+  <!-- Validation style -->
+  <style>
+    body {
+      background-color: white !important;
+    }
+    
+    button.buynow {
+    margin-top: 8px;
+}
+    
+    .input-line-item {
+      flex-direction: column;
+    }
+    
+    label.errorValidate {
+      text-align: center;
+    }
+    
+    label.errorValidate {
+      display: block;
+      position: static;
+      background: red;
+      color: white;
+      font-size: 16px;
+      margin-top: 3px;
+      margin: 0 auto;
+      padding-left: 10px;
+      padding-right: 10px;
+      border-radius: 5px;
+      width: 50%;
+    }
+    
+    .errorBorder {
+      border: 2px solid red !important;
+    }
+    
+    .force-scroll {
+      cursor: pointer;
+    }
+  </style>
+  
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link href="images/favicon.png" rel="shortcut icon" type="image/x-icon">
+  <style>
+    * {
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box
+    }
+    
+    *:before,
+    *:after {
+      -webkit-box-sizing: border-box;
+      box-sizing: border-box
+    }
+    
+    html,
+    body,
+    div,
+    span,
+    h1,
+    h2,
+    h3,
+    h4,
+    p,
+    a,
+    img,
+    strong,
+    b,
+    ul,
+    li,
+    form,
+    label,
+    section {
+      margin: 0;
+      padding: 0;
+      border: 0;
+      font-size: 100%;
+      font: inherit;
+      vertical-align: baseline
+    }
+    
+    section {
+      display: block
+    }
+    
+    body {
+      line-height: 1
+    }
+    
+    ul {
+      list-style: none
+    }
+    
+    body {
+      font-family: "Roboto", "Open Sans", sans-serif;
+      font-size: 16px;
+      color: #fff
+    }
+    
+    .container {
+      max-width: 1154px;
+      width: 100%;
+      margin: 0 auto;
+      position: relative;
+      padding-right: 10px;
+      padding-left: 10px
+    }
+    
+    .header {
+      background-color: #009fd2;
+      padding: 25px 0;
+      position: relative;
+      z-index: 1
+    }
+    
+    .header .container {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-line-pack: center;
+      align-content: center;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center
+    }
+    
+    .header img {
+      position: absolute;
+      width: 143px;
+      height: 33px;
+      left: 10px;
+      top: 50%;
+      -webkit-transform: translate(0, -50%);
+      transform: translate(0, -50%)
+    }
+    
+    .header h1 {
+      font-size: 30px;
+      font-weight: 400;
+      text-transform: uppercase
+    }
+    
+    .include {
+      background-color: #110430;
+      padding: 30px 0 60px;
+      position: relative
+    }
+    
+    .include::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      background: url(images/include-bg.png) no-repeat;
+      width: 683px;
+      height: 850px;
+      opacity: .5
+    }
+    
+    .include h2 {
+      font-size: 42px;
+      line-height: 48px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 20px
+    }
+    
+    .include h3 {
+      font-size: 28px;
+      line-height: 34px;
+      font-weight: 400;
+      text-align: center;
+      max-width: 780px;
+      width: 100%;
+      margin: 0 auto 10px
+    }
+    
+    .include .wrapper {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      -webkit-box-align: end;
+      -ms-flex-align: end;
+      align-items: flex-end
+    }
+    
+    .include .left {
+      margin-top: 80px
+    }
+    
+    .include .left ul {
+      padding: 0 15px 0 70px
+    }
+    
+    .include .left li {
+      position: relative;
+      padding-left: 40px;
+      font-size: 28px;
+      margin-bottom: 15px;
+      max-width: 385px;
+      width: 100%
+    }
+    
+    .include .left li:before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 5px;
+      width: 22px;
+      height: 22px;
+      border-radius: 5px;
+      border: 2px solid #ffc104
+    }
+    
+    .include .left li:after {
+      content: "";
+      position: absolute;
+      left: 4px;
+      top: 10px;
+      width: 14px;
+      height: 8px;
+      border: 3px solid #ffc104;
+      border-top: none;
+      border-right: none;
+      -webkit-transform: rotate(-45deg);
+      transform: rotate(-45deg)
+    }
+    
+    .include .left .quality {
+      background-color: rgba(112, 112, 112, .8);
+      padding: 20px 60px 10px 25px;
+      position: relative
+    }
+    
+    .include .left .quality::after {
+      content: "";
+      background: url(images/product.png) no-repeat;
+      background-size: cover;
+      width: 183px;
+      height: 359px;
+      position: absolute;
+      right: -164px;
+      top: 50%;
+      -webkit-transform: translate(0, -44%);
+      transform: translate(0, -44%);
+      z-index: 1
+    }
+    
+    .include .left .quality p {
+      font-size: 20px;
+      line-height: 24px;
+      max-width: 340px;
+      width: 100%;
+      padding-left: 90px;
+      margin-bottom: 25px;
+      min-height: 60px;
+      position: relative
+    }
+    
+    .include .left .quality p::before {
+      content: "";
+      background: url(images/include-humans.png) no-repeat;
+      width: 81px;
+      height: 86px;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      -webkit-transform: translate(0, -50%);
+      transform: translate(0, -50%)
+    }
+    
+    .include .left .quality b {
+      font-size: 28px;
+      font-weight: 700;
+      text-transform: uppercase
+    }
+    
+    form {
+      max-width: 320px;
+      width: 100%;
+      padding: 15px 15px 10px;
+      background-color: #fff;
+      border-radius: 5px;
+      color: #161616
+    }
+    
+    form h4 {
+      font-size: 22px;
+      line-height: 26px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 10px
+    }
+    
+    form .price p {
+      font-size: 16px;
+      line-height: 16px;
+      font-weight: 400;
+      padding-left: 10px;
+      margin-bottom: 20px
+    }
+    
+    form .price p .al-cost-promo {
+      font-size: 25px;
+      text-decoration: line-through
+    }
+    
+    form .price p .al-cost {
+      font-size: 30px;
+      font-weight: 700;
+      color: red
+    }
+    
+    form input {
+      width: 100%;
+      border-radius: 6px;
+      height: 45px;
+      text-indent: 50px;
+      color: #000;
+      line-height: 45px;
+      margin-bottom: 14px;
+      font-size: 16px;
+      border: 1px solid #000;
+      outline: none
+    }
+    
+    form input[name="first_name"] {
+      background: url(images/name.png) no-repeat 15px 50%
+    }
+    
+    form input[name="phone"] {
+      background: url(images/phone.png) no-repeat 15px 50%
+    }
+    
+    .input-wrapper label {
+      display: none
+    }
+    
+    .input-wrapper {
+      position: relative
+    }
+    
+    button,
+    .button {
+      width: 100%;
+      font-size: 22px;
+      text-transform: uppercase;
+      color: #fff;
+      font-weight: 700;
+      background: #f0231e;
+      border: 0;
+      padding: 15px 0;
+      border-bottom: 3px solid #870e0b;
+      border-radius: 10px;
+      -webkit-transition: all 0.3s;
+      transition: all 0.3s;
+      outline: none
+    }
+    
+    button:hover,
+    .button:hover {
+      background: #d70f0a
+    }
+    
+    form b {
+      display: inline-block;
+      margin-top: 10px;
+      font-size: 14px;
+      font-weight: 700;
+      line-height: 24px;
+    }
+    
+    form b span {
+      background: #ff7200;
+      color: #fff;
+      font-weight: 700;
+      border-radius: 5px;
+      padding: 2px;
+      font-size: 16px
+    }
+    
+    .proven {
+      background-color: #fff;
+      padding: 60px 0 35px;
+      position: relative
+    }
+    
+    .proven .container {
+      padding: 0
+    }
+    
+    .proven .wrapper {
+      padding: 30px 30px 80px;
+      background: linear-gradient(135deg, #009ccf 0, #009ccf 57%, #1d254c 57%, #1d254c 59%, rgba(255, 255, 255, 0) 59%, rgba(255, 255, 255, 0)) 100%, url(images/proven-bg.png) no-repeat right top;
+      min-height: 405px
+    }
+    
+    .proven .wrapper h2 {
+      font-size: 40px;
+      font-weight: 700;
+      text-transform: uppercase;
+      margin-bottom: 15px
+    }
+    
+    .proven .wrapper h3 {
+      max-width: 700px;
+      width: 100%;
+      font-size: 25px;
+      font-weight: 700;
+      margin-bottom: 15px
+    }
+    
+    .proven .wrapper p {
+      max-width: 535px;
+      width: 100%;
+      font-size: 18px;
+      margin-bottom: 15px
+    }
+    
+    .advantages {
+      background: #012c3f;
+      padding: 60px 0 40px
+    }
+    
+    .advantages h2 {
+      font-size: 40px;
+      font-weight: 700;
+      text-align: center;
+      margin-bottom: 50px
+    }
+    
+    .advantages ul {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+      justify-content: space-between
+    }
+    
+    .advantages ul li {
+      width: 32%;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      margin-bottom: 50px
+    }
+    
+    .advantages ul li p {
+      color: #009fd2;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 24px;
+      padding-top: 20px
+    }
+    
+    .advantages .interception {
+      background-color: #009fd2;
+      padding: 40px 40px 40px 300px;
+      border-radius: 5px;
+      position: relative;
+      z-index: 2
+    }
+    
+    .advantages .interception:before {
+      content: "";
+      position: absolute;
+      background-image: url(images/product.png);
+      background-size: contain;
+      width: 100px;
+      height: 195px;
+      left: 100px;
+      top: -17px;
+      z-index: 2
+    }
+    
+    .advantages .interception p {
+      font-size: 18px;
+      line-height: 25px
+    }
+    
+    .trust {
+      background: #009cce;
+      padding: 75px 0 55px;
+      position: relative
+    }
+    
+    .trust::after {
+      content: "";
+      position: absolute;
+      top: 0;
+      right: 50%;
+      -webkit-transform: translate(50%, -50%);
+      transform: translate(50%, -50%);
+      width: 75px;
+      height: 75px;
+      border-radius: 50%;
+      background-color: #012c3f
+    }
+    
+    .trust h2 {
+      font-size: 40px;
+      line-height: 56px;
+      font-weight: 700;
+      text-align: center
+    }
+    
+    .trust h3 {
+      font-size: 25px;
+      line-height: 35px;
+      font-weight: 700;
+      text-align: center
+    }
+    
+    .trust ul {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      margin: 60px 0 40px
+    }
+    
+    .trust ul li {
+      width: 32%;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center
+    }
+    
+    .trust ul li:nth-child(-n+3) {
+      margin-bottom: 100px
+    }
+    
+    .trust ul li p {
+      max-width: 235px;
+      padding-right: 10px;
+      margin-left: 20px
+    }
+    
+    .trust .wrapper {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center
+    }
+    
+    .trust .left {
+      margin-top: 80px
+    }
+    
+    .trust .left .quality {
+      background-color: #38b0d6;
+      padding: 45px 60px 30px 25px;
+      position: relative
+    }
+    
+    .trust .left .quality::after {
+      content: "";
+      background: url(images/product.png) no-repeat;
+      background-size: cover;
+      width: 183px;
+      height: 359px;
+      position: absolute;
+      right: -169px;
+      top: 50%;
+      -webkit-transform: translate(0, -61%);
+      transform: translate(0, -61%);
+      z-index: 1
+    }
+    
+    .trust .left .quality p {
+      font-size: 20px;
+      line-height: 24px;
+      max-width: 340px;
+      width: 100%;
+      padding-left: 90px;
+      margin-bottom: 25px;
+      min-height: 60px;
+      position: relative
+    }
+    
+    .trust .left .quality p::before {
+      content: "";
+      background: url(images/include-humans.png) no-repeat;
+      width: 81px;
+      height: 86px;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      -webkit-transform: translate(0, -50%);
+      transform: translate(0, -50%)
+    }
+    
+    .trust .left .quality b {
+      font-size: 28px;
+      font-weight: 700;
+      text-transform: uppercase
+    }
+    
+    .help {
+      background: #012c3f;
+      padding: 60px 0 40px
+    }
+    
+    .help h2 {
+      max-width: 970px;
+      width: 100%;
+      text-align: center;
+      font-size: 40px;
+      font-weight: 700;
+      margin: 0 auto 50px;
+      position: relative
+    }
+    
+    .help h2::after {
+      content: "";
+      position: absolute;
+      right: -5px;
+      bottom: -25px;
+      background-image: url(images/help-line.png);
+      width: 811px;
+      height: 19px
+    }
+    
+    .help ul {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-wrap: wrap;
+      flex-wrap: wrap;
+      -webkit-box-pack: space-evenly;
+      -ms-flex-pack: space-evenly;
+      justify-content: space-evenly
+    }
+    
+    .help ul li {
+      width: 32%;
+      margin-bottom: 50px;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+      flex-direction: column
+    }
+    
+    .help ul li:last-child {
+      margin-bottom: 25px
+    }
+    
+    .help ul li p {
+      color: #009fd2;
+      font-size: 20px;
+      font-weight: 700;
+      line-height: 24px;
+      padding-top: 20px;
+      text-align: center
+    }
+    
+    .longer {
+      background-image: url(images/longer-bg.jpg);
+      background-size: cover;
+      padding: 80px 0 50px
+    }
+    
+    .longer .wrap {
+      border: 1px solid #009fd2;
+      border-radius: 10px;
+      padding: 52px 30px 60px 270px;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      position: relative
+    }
+    
+    .longer .wrap::after {
+      content: "";
+      background-image: url(images/longer-man.png);
+      width: 290px;
+      height: 245px;
+      position: absolute;
+      bottom: 0;
+      left: -17px
+    }
+    
+    .longer .wrap p {
+      font-size: 37px;
+      line-height: 44px;
+      font-weight: 700
+    }
+    
+    .longer .wrap a {
+      max-width: 285px;
+      display: inline-block;
+      text-decoration: none;
+      text-align: center;
+      position: relative
+    }
+    
+    .longer .wrap a:after {
+      content: "";
+      background-image: url(images/longer-hand.png);
+      width: 51px;
+      height: 60px;
+      position: absolute;
+      bottom: -52px;
+      right: 3px
+    }
+    
+    .result {
+      background: url(images/result-bg.jpg) top center;
+      background-size: cover;
+      padding: 30px 0 65px
+    }
+    
+    .result h2 {
+      font-size: 55px;
+      text-align: center
+    }
+    
+    .result h2 span {
+      color: #009fd2
+    }
+    
+    .result h3 {
+      max-width: 950px;
+      width: 100%;
+      font-size: 20px;
+      line-height: 28px;
+      font-weight: 700;
+      text-align: center;
+      margin: 0 auto 30px
+    }
+    
+    .result .wrap {
+      background-color: #fff;
+      border-radius: 25px;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex
+    }
+    
+    .result .wrap > div {
+      width: 50%
+    }
+    
+    .result .wrap .prod {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-align: center;
+      -ms-flex-align: center;
+      align-items: center;
+      -webkit-box-pack: center;
+      -ms-flex-pack: center;
+      justify-content: center
+    }
+    
+    .result .wrap img {
+      width: 255px;
+      height: 497px
+    }
+    
+    .result .reviews {
+      padding: 30px 25px 45px;
+      border-left: 1px solid #000
+    }
+    
+    .result .filters {
+      position: relative
+    }
+    
+    .result .filters > div {
+      position: absolute;
+      width: 275px;
+      height: 43px;
+      text-align: center;
+      padding-top: 15px;
+      color: #fff;
+      font-size: 16px;
+      background-repeat: no-repeat;
+      -webkit-transition: background 0.2s;
+      transition: background 0.2s
+    }
+    
+    .result .filters .btn-man {
+      background-image: url(images/man-tab.png);
+      left: 50%;
+      -webkit-transform: translate(-50%, 0);
+      transform: translate(-50%, 0);
+      margin-left: -110px
+    }
+    
+    .result .filters .btn-woman {
+      background-image: url(images/woman-tab.png);
+      right: 50%;
+      -webkit-transform: translate(50%, 0);
+      transform: translate(50%, 0);
+      margin-right: -110px
+    }
+    
+    .filters .active {
+      z-index: 5
+    }
+    
+    .result .review {
+      margin-top: 43px;
+      border: 1px solid #ccc;
+      border-radius: 10px 0 0 10px;
+      padding: 30px 20px 20px;
+      overflow-y: scroll;
+      max-width: 525px;
+      width: 100%;
+      height: 460px
+    }
+    
+    .result .review p {
+      padding: 5px 0;
+      font-size: 14px
+    }
+    
+    .result .review .man {
+      color: #258be1;
+      margin-bottom: 10px
+    }
+    
+    .result .review .woman {
+      color: #e12594;
+      margin-bottom: 10px
+    }
+    
+    .expert {
+      background-color: #009cce;
+      padding: 20px 0 15px
+    }
+    
+    .expert .container {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -ms-flex-pack: distribute;
+      justify-content: space-around
+    }
+    
+    .expert .doctor div {
+      padding-left: 17px;
+      margin-top: 15px;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-orient: vertical;
+      -webkit-box-direction: normal;
+      -ms-flex-direction: column;
+      flex-direction: column;
+      -webkit-box-align: start;
+      -ms-flex-align: start;
+      align-items: flex-start;
+      color: #000
+    }
+    
+    .expert .doctor div span {
+      margin: 5px 0 10px;
+      font-size: 14px
+    }
+    
+    .expert .content {
+      max-width: 565px;
+      width: 100%;
+      padding: 0 20px;
+      font-size: 18px;
+      line-height: 20px
+    }
+    
+    .expert .content p {
+      margin-bottom: 20px
+    }
+    
+    .fabricator {
+      background: #09222b;
+      padding: 50px 0
+    }
+    
+    .fabricator .wrap {
+      background: #022b3d;
+      border: 1px solid #009cce;
+      border-radius: 10px;
+      padding: 30px 30px 10px;
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex
+    }
+    
+    .fabricator .wrap > div {
+      max-width: 543px;
+      width: 100%;
+      padding: 0 15px;
+      margin-bottom: 20px
+    }
+    
+    .fabricator .wrap > div img {
+      width: 100%
+    }
+    
+    .fabricator .wrap h2 {
+      margin: 40px 0 20px;
+      text-transform: uppercase;
+      font-size: 40px;
+      font-weight: 700
+    }
+    
+    .fabricator .wrap p {
+      font-size: 18px;
+      line-height: 25px
+    }
+    
+    .fabricator .wrap li {
+      font-size: 18px;
+      line-height: 25px;
+      padding-left: 30px;
+      margin-bottom: 20px;
+      border-left: 6px solid #009cce
+    }
+    
+    .reliance {
+      background: #01374e;
+      padding: 40px 0
+    }
+    
+    .reliance .container div {
+      border: 11px solid #009cce;
+      border-top: none;
+      border-bottom: none;
+      padding: 0 30px
+    }
+    
+    .reliance h2 {
+      max-width: 780px;
+      width: 100%;
+      margin: 0 auto;
+      color: #009fd2;
+      font-size: 30px;
+      line-height: 42px;
+      font-weight: 700;
+      text-align: center
+    }
+    
+    .fill {
+      background-color: #022d3e;
+      padding: 65px 0 105px;
+      position: relative
+    }
+    
+    .fill .container {
+      position: relative
+    }
+    
+    .fill::before {
+      content: "";
+      position: absolute;
+      top: 0;
+      background: url(images/fill-bg.png) no-repeat;
+      width: 100%;
+      height: 100%
+    }
+    
+    .fill .wrapper {
+      display: -webkit-box;
+      display: -ms-flexbox;
+      display: flex;
+      -webkit-box-pack: justify;
+      -ms-flex-pack: justify;
+      justify-content: space-between;
+      -webkit-box-align: start;
+      -ms-flex-align: start;
+      align-items: flex-start
+    }
+    
+    .fill .left {
+      max-width: 700px;
+      width: 100%
+    }
+    
+    .fill .left h2 {
+      font-size: 33px;
+      line-height: 46px;
+      font-weight: 700;
+      margin-bottom: 125px
+    }
+    
+    .fill .left h2 span {
+      color: #ffc104
+    }
+    
+    .fill .left .quality {
+      max-width: 430px;
+      background-color: rgba(112, 112, 112, .8);
+      padding: 20px 60px 10px 25px;
+      position: relative
+    }
+    
+    .fill .left .quality::after {
+      content: "";
+      background: url(images/product.png) no-repeat;
+      background-size: cover;
+      width: 183px;
+      height: 359px;
+      position: absolute;
+      right: -169px;
+      top: 50%;
+      -webkit-transform: translate(0, -50%);
+      transform: translate(0, -50%);
+      z-index: 1
+    }
+    
+    .fill .left .quality p {
+      font-size: 20px;
+      line-height: 24px;
+      max-width: 340px;
+      width: 100%;
+      padding-left: 90px;
+      margin-bottom: 25px;
+      min-height: 60px;
+      position: relative
+    }
+    
+    .fill .left .quality p::before {
+      content: "";
+      background: url(images/include-humans.png) no-repeat;
+      width: 81px;
+      height: 86px;
+      position: absolute;
+      left: 0;
+      top: 50%;
+      -webkit-transform: translate(0, -50%);
+      transform: translate(0, -50%)
+    }
+    
+    .fill .left .quality b {
+      font-size: 28px;
+      font-weight: 700;
+      text-transform: uppercase
+    }
+    
+    .fill .secure {
+      margin-top: 15px;
+      padding-left: 90px;
+      max-width: 320px;
+      width: 100%;
+      position: relative
+    }
+    
+    .fill .secure::before {
+      content: "";
+      position: absolute;
+      left: 0;
+      top: 50%;
+      -webkit-transform: translate(0, -50%);
+      transform: translate(0, -50%);
+      background-image: url(images/fill-secure.png);
+      width: 77px;
+      height: 30px
+    }
+    
+    .back-to-top {
+      position: absolute;
+      right: 20px;
+      bottom: 10px;
+      text-decoration: none !important;
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
+      border: 1px solid #dadada;
+      z-index: 555;
+      background: rgba(255, 255, 255, .2);
+      -webkit-transition: 0.2s;
+      transition: 0.2s
+    }
+    
+    .back-to-top:after {
+      content: "";
+      position: absolute;
+      top: 50%;
+      right: 50%;
+      width: 21px;
+      height: 21px;
+      border: 2px solid #505050;
+      border-bottom: none;
+      border-left: none;
+      pointer-events: none;
+      -webkit-transform: translate(50%, -25%) rotate(-45deg);
+      transform: translate(50%, -25%) rotate(-45deg)
+    }
+    
+    .back-to-top:hover {
+      border-color: #505050;
+      background: #eee
+    }
+    
+    .footer {
+      position: relative;
+      z-index: 2;
+      padding: 30px 0;
+    }
+    
+    @media screen and (max-width: 1120px) {
+      .header .container {
+        -webkit-box-pack: end;
+        -ms-flex-pack: end;
+        justify-content: flex-end
+      }
+      
+      .include {
+        overflow: hidden
+      }
+      
+      .include .wrapper {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center
+      }
+      
+      .include::before {
+        top: unset;
+        bottom: 0;
+        -webkit-transform: scale(1.65);
+        transform: scale(1.65);
+      }
+      
+      .include .left {
+        margin-top: 35px
+      }
+      
+      .proven {
+        padding: 0
+      }
+      
+      .proven .wrapper h3 {
+        max-width: 620px
+      }
+      
+      .proven .wrapper p {
+        max-width: 445px
+      }
+      
+      .advantages {
+        padding: 20px 0
+      }
+      
+      .advantages ul {
+        -ms-flex-pack: distribute;
+        justify-content: space-around
+      }
+      
+      .advantages ul li {
+        width: 35%
+      }
+      
+      .trust {
+        padding: 40px 0
+      }
+      
+      .trust ul {
+        -ms-flex-pack: distribute;
+        justify-content: space-around
+      }
+      
+      .trust ul li {
+        width: 35%;
+        margin-bottom: 50px
+      }
+      
+      .trust ul li:nth-child(-n+3) {
+        margin-bottom: 50px
+      }
+      
+      .help {
+        padding: 25px 0
+      }
+      
+      .help ul li {
+        width: 35%
+      }
+      
+      .longer {
+        padding: 25px 0
+      }
+      
+      .longer .wrap {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        text-align: center
+      }
+      
+      .longer .wrap p {
+        font-size: 32px;
+        line-height: 38px;
+        margin-bottom: 10px
+      }
+      
+      .result {
+        padding: 20px 0
+      }
+      
+      .result .wrap {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center;
+        padding-top: 40px
+      }
+      
+      .result .reviews {
+        border: none
+      }
+      
+      .result .review {
+        max-width: 100%
+      }
+      
+      .result .wrap > div {
+        width: 88%
+      }
+      
+      .expert .container {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center
+      }
+      
+      .expert .doctor {
+        margin-bottom: 20px
+      }
+      
+      .expert .doctor div {
+        -webkit-box-orient: horizontal;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: row;
+        flex-direction: row;
+        -ms-flex-pack: distribute;
+        justify-content: space-around
+      }
+      
+      .reliance {
+        padding: 20px 0
+      }
+      
+      .fabricator {
+        padding: 20px 0
+      }
+      
+      .fabricator .wrap {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center
+      }
+      
+      .fill .wrapper {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center
+      }
+      
+      .fill .left .quality {
+        margin-bottom: 125px
+      }
+    }
+    
+    @media screen and (max-width: 990px) {
+      .include .left .quality::after {
+        right: -135px
+      }
+      
+      .include .left ul {
+        margin-bottom: 80px
+      }
+      
+      .proven .wrapper {
+        background: #009ccf;
+        padding-bottom: 30px;
+        min-height: 100%
+      }
+      
+      .proven .wrapper h3,
+      .proven .wrapper p {
+        max-width: 100%
+      }
+      
+      .advantages ul li p {
+        padding-top: 5px
+      }
+      
+      .trust .wrapper {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column
+      }
+      
+      .trust ul li {
+        width: 43%
+      }
+      
+      .trust ul li p {
+        max-width: 210px
+      }
+      
+      .help ul li p {
+        padding-top: 5px
+      }
+    }
+    
+    @media screen and (max-width: 768px) {
+      .header {
+        padding: 15px 0
+      }
+      
+      .header h1 {
+        font-size: 28px;
+        text-align: center
+      }
+      
+      .header .container {
+        -webkit-box-orient: vertical;
+        -webkit-box-direction: normal;
+        -ms-flex-direction: column;
+        flex-direction: column;
+        -webkit-box-align: center;
+        -ms-flex-align: center;
+        align-items: center
+      }
+      
+      .header img {
+        position: static;
+        -webkit-transform: none;
+        transform: none;
+        margin-bottom: 10px
+      }
+      
+      .include::before {
+        -webkit-transform: scale(2.45);
+        transform: scale(2.45)
+      }
+      
+      .include .left ul {
+        margin-bottom: 365px
+      }
+      
+      .include .left .quality::after {
+        top: -342px;
+        left: 50%;
+        -webkit-transform: translate(-50%, 0);
+        transform: translate(-50%, 0)
+      }
+      
+      .include .left .quality p {
+        max-width: 320px
+      }
+      
+      .advantages ul li {
+        width: 53%
+      }
+      
+      .advantages .interception {
+        padding: 50px 40px 50px 150px
+      }
+      
+      .advantages .interception:before {
+        left: 25px;
+        top: 50%;
+        -webkit-transform: translate(0, -50%);
+        transform: translate(0, -50%)
+      }
+      
+      .trust ul {
+        margin-bottom: 250px
+      }
+      
+      .trust ul li {
+        width: 55%
+      }
+      
+      .trust .left .quality::after {
+        top: -342px;
+        left: 50%;
+        -webkit-transform: translate(-50%, 0);
+        transform: translate(-50%, 0)
+      }
+      
+      .help ul li {
+        width: 51%
+      }
+      
+      .longer .wrap {
+        padding: 25px 25px 300px
+      }
+      
+      .longer .wrap::after {
+        left: 50%;
+        -webkit-transform: translate(-50%, 0);
+        transform: translate(-50%, 0)
+      }
+      
+      .result .filters .btn-man {
+        margin-left: -83px
+      }
+      
+      .result .filters .btn-woman {
+        margin-right: -83px
+      }
+      
+      .fill {
+        padding: 25px 0
+      }
+      
+      .fill .left h2 {
+        margin-bottom: 360px
+      }
+      
+      .fill .left .quality {
+        margin: 0 auto 25px
+      }
+      
+      .fill .left .quality::after {
+        top: -342px;
+        left: 50%;
+        -webkit-transform: translate(-50%, 0);
+        transform: translate(-50%, 0)
+      }
+      
+      .back-to-top {
+        bottom: -87px;
+        right: 50%;
+        -webkit-transform: translate(50%, 0);
+        transform: translate(50%, 0)
+      }
+      
+      .footer {
+        padding-top: 72px !important
+      }
+    }
+    
+    @media screen and (max-width: 600px) {
+      .include {
+        padding: 10px 0
+      }
+      
+      .include h2 {
+        font-size: 35px;
+        line-height: 39px
+      }
+      
+      .include h3 {
+        font-size: 24px;
+        line-height: 28px
+      }
+      
+      .include .left ul {
+        padding: 0 15px
+      }
+      
+      .include .left li {
+        font-size: 24px
+      }
+      
+      .include .left .quality p {
+        font-size: 18px
+      }
+      
+      .include .left .quality b {
+        font-size: 24px
+      }
+      
+      .proven .wrapper h2 {
+        font-size: 36px
+      }
+      
+      .proven .wrapper h3 {
+        font-size: 22px
+      }
+      
+      .proven .wrapper p {
+        font-size: 16px
+      }
+      
+      .advantages h2 {
+        font-size: 35px;
+        margin-bottom: 25px
+      }
+      
+      .advantages ul li {
+        width: 75%
+      }
+      
+      .advantages ul li p {
+        font-size: 16px;
+        text-align: center
+      }
+      
+      .advantages .interception p {
+        font-size: 16px
+      }
+      
+      .trust h2 {
+        font-size: 34px;
+        line-height: 36px
+      }
+      
+      .trust h3 {
+        font-size: 20px;
+        line-height: 22px
+      }
+      
+      .trust ul {
+        margin-top: 30px
+      }
+      
+      .trust ul li {
+        width: 75%
+      }
+      
+      .help h2 {
+        font-size: 34px
+      }
+      
+      .help ul li {
+        width: 75%
+      }
+      
+      .help ul li p {
+        font-size: 16px;
+        line-height: 20px
+      }
+      
+      .longer .wrap p {
+        font-size: 28px;
+        line-height: 34px
+      }
+      
+      .result h2 {
+        font-size: 38px
+      }
+      
+      .result h3 {
+        font-size: 18px;
+        line-height: 22px
+      }
+      
+      .result .filters .btn-man {
+        margin-left: -60px
+      }
+      
+      .result .filters .btn-woman {
+        margin-right: -60px
+      }
+      
+      .result .review {
+        padding: 15px
+      }
+      
+      .result .wrap > div {
+        width: 100%
+      }
+      
+      .expert .content {
+        font-size: 16px
+      }
+      
+      .expert .doctor > img {
+        width: 100%
+      }
+      
+      .fabricator .wrap {
+        padding: 10px
+      }
+      
+      .fabricator .wrap > div {
+        padding: 0
+      }
+      
+      .fabricator .wrap h2 {
+        margin: 15px 0 10px;
+        font-size: 32px
+      }
+      
+      .fabricator .wrap p {
+        font-size: 16px;
+        line-height: 22px
+      }
+      
+      .fabricator .wrap li {
+        padding-left: 10px;
+        font-size: 16px;
+        line-height: 20px
+      }
+      
+      .reliance h2 {
+        font-size: 24px;
+        line-height: 30px
+      }
+      
+      .fill .left h2 {
+        font-size: 26px;
+        line-height: 34px;
+        text-align: center
+      }
+      
+      .fill .left .quality p {
+        font-size: 18px;
+        line-height: 20px
+      }
+      
+      .fill .left .quality b {
+        font-size: 24px
+      }
+    }
+    
+    @media screen and (max-width: 480px) {
+      .include h2 {
+        font-size: 30px;
+        line-height: 32px
+      }
+      
+      .advantages ul li {
+        width: 90%
+      }
+      
+      .trust ul li {
+        width: 95%
+      }
+      
+      .trust ul li:nth-child(-n+3) {
+        margin-bottom: 30px
+      }
+      
+      .trust ul li:nth-child {
+        margin-bottom: 30px
+      }
+      
+      .trust .left .quality {
+        padding: 25px 15px
+      }
+      
+      .help h2 {
+        font-size: 28px
+      }
+      
+      .help ul li {
+        width: 100%
+      }
+      
+      .result h2 {
+        font-size: 32px
+      }
+      
+      .result .wrap img {
+        width: 183px;
+        height: 359px
+      }
+      
+      .result .filters .btn-man {
+        margin-left: -8px
+      }
+      
+      .result .filters .btn-woman {
+        margin-right: -8px
+      }
+    }
+    
+    @media screen and (max-width: 380px) {
+      .container {
+        padding-right: 5px;
+        padding-left: 5px
+      }
+      
+      .include::before {
+        -webkit-transform: scale(3);
+        transform: scale(3)
+      }
+      
+      .result h2 {
+        font-size: 24px
+      }
+      
+      .include .left .quality {
+        padding: 15px
+      }
+      
+      .proven .wrapper {
+        padding: 15px
+      }
+      
+      .advantages h2 {
+        font-size: 28px
+      }
+      
+      .advantages ul li {
+        margin-bottom: 30px
+      }
+      
+      .advantages .interception:before {
+        left: 50%;
+        top: 15px;
+        -webkit-transform: translate(-50%, 0);
+        transform: translate(-50%, 0)
+      }
+      
+      .advantages .interception {
+        padding: 225px 15px 30px
+      }
+      
+      .help ul li {
+        margin-bottom: 25px
+      }
+      
+      .result .reviews {
+        padding: 15px 3px
+      }
+      
+      .expert .content {
+        padding: 0
+      }
+      
+      .expert .doctor div {
+        padding-left: 0
+      }
+      
+      .fabricator .wrap h2 {
+        font-size: 24px
+      }
+      
+      .reliance .container div {
+        padding: 0 10px
+      }
+      
+      .reliance h2 {
+        font-size: 20px;
+        line-height: 24px
+      }
+      
+      .fill .left .quality {
+        padding: 15px
+      }
+    }
+    
+    .blockRedLine3103 {
+      color: rgb(255, 255, 255);
+      background: red;
+      box-sizing: border-box;
+      font: 400 16px / 1.15 Arial, sans-serif;
+      position: relative;
+      z-index: 1000000;
+      padding: 0;
+      margin: 0;
+      direction: ltr;
+      text-transform: none;
+    }
+    
+    .red-inner {
+      font: inherit;
+      margin: 0 auto;
+      padding: 10px;
+      max-width: 1200px;
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      box-sizing: border-box;
+    }
+    
+    .blockRedLine3103__image_1 {
+      flex-shrink: 0;
+      box-sizing: border-box;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .blockRedLine3103__image_1_1 {
+      width: 65px;
+      height: 5px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.3);
+      margin: 0 0px 10px;
+      box-sizing: border-box;
+    }
+    
+    .blockRedLine3103__image_1_2 {
+      width: 65px;
+      height: 5px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.3);
+      margin: 0 0px 10px 20px;
+      box-sizing: border-box;
+    }
+    
+    .blockRedLine3103__image_1_3 {
+      width: 65px;
+      height: 5px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.3);
+      margin: 0 0px 0 10px;
+      box-sizing: border-box;
+    }
+    
+    .red_box_text {
+      font: inherit;
+      text-align: center;
+      box-sizing: border-box;
+      padding: 0 5px;
+      margin: 0;
+    }
+    
+    .red_box_text_1 {
+      font-style: inherit;
+      font-variant: inherit;
+      font-stretch: inherit;
+      font-size: inherit;
+      line-height: inherit;
+      font-family: inherit;
+      font-weight: 700;
+      color: inherit;
+      padding: 0;
+      margin: 0 0px 5px;
+      box-sizing: border-box;
+    }
+    
+    .red_box_text_2 {
+      font-style: inherit;
+      font-variant: inherit;
+      font-weight: inherit;
+      font-stretch: inherit;
+      line-height: inherit;
+      font-family: inherit;
+      font-size: 13px;
+      color: inherit;
+      padding: 0;
+      margin: 0;
+      box-sizing: border-box;
+    }
+    
+    .blockRedLine3103__image_2 {
+      flex-shrink: 0;
+      box-sizing: border-box;
+      padding: 0;
+      margin: 0;
+    }
+    
+    .blockRedLine3103__image_2_1 {
+      width: 65px;
+      height: 5px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.3);
+      margin: 0 0px 10px;
+      box-sizing: border-box;
+    }
+    
+    .blockRedLine3103__image_2_2 {
+      width: 65px;
+      height: 5px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.3);
+      margin: 0 0px 10px 20px;
+      box-sizing: border-box;
+    }
+    
+    .blockRedLine3103__image_2_3 {
+      width: 65px;
+      height: 5px;
+      border-radius: 2px;
+      background: rgba(255, 255, 255, 0.3);
+      margin: 0 0px 0 10px;
+      box-sizing: border-box;
+    }
+    
+    .footer {
+      font: 400 16px / 1 Helvetica, Arial, sans-serif;
+      max-width: 100%;
+      width: 100%;
+      text-align: center;
+      color: rgb(71, 71, 71);
+      padding: 40px 0;
+      margin: 0 auto;
+      background: rgb(255, 255, 255);
+      direction: ltr;
+      text-transform: none;
+      height: auto;
+      text-indent: initial;
+    }
+    
+    .footer__t {
+      margin-top: 10px;
+    }
+    
+    .footer__cm {
+      padding: 0 5px;
+      margin: 20px 0 0px;
+      font: inherit;
+      color: inherit;
+      text-align: center;
+    }
+    
+    #mop_holder {
+      top: 150px !important;
+    }
+    
+    @media only screen and (max-width: 650px) {
+      
+      .blockRedLine3103__image_1,
+      .blockRedLine3103__image,
+      .blockRedLine3103__image_2 {
+        display: none;
+      }
+    }
+  </style>
+  <style>
+    .mop_input {
+      color: black !important;
+      background: white !important
+    }
+    
+    #mop_holder {
+      position: fixed;
+      display: none;
+      top: 50px;
+      left: 50%;
+      margin-left: -300px;
+      width: 600px;
+      background: #cccccc;
+      background: -moz-linear-gradient(top, #cccccc 0%, #999999 44%, #666666 100%);
+      background: -webkit-linear-gradient(top, #cccccc 0%, #999999 44666666 100%);
+      background: linear-gradient(to bottom, #cccccc 0%, #999999 44%, #666666 100%);
+      filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#cccccc', endColorstr='#666666', GradientType=0);
+      border-radius: 15px;
+      padding: 10px;
+      z-index: 9999;
+      box-shadow: 0 0px 30px #888888;
+    }
+    
+    #mop_holder .mop_col {
+      width: 49%;
+      padding: 0;
+      float: left;
+      text-align: center;
+      overflow: hidden
+    }
+    
+    #mop_holder .mop_col_left {
+      width: 40%;
+    }
+    
+    #mop_holder .mop_padder {
+      padding: 10px;
+    }
+    
+    #mop_holder .mop_col_right {
+      width: 59%;
+    }
+    
+    #mop_holder .mop_col img.prod_img {
+      width: 100%;
+      height: auto;
+    }
+    
+    #mop_holder a {
+      font-size: 20px;
+      font-weight: bold;
+      text-align: center;
+      color: white !important;
+      text-decoration: none;
+      cursor: pointer;
+    }
+    
+    #mop_holder .mop_buynowbtn {
+      padding: 10px 20px;
+      background: red;
+      border-radius: 8px;
+      text-shadow: 1px 1px 5px darkgray;
+      font-size: 18px;
+      line-height: 1.5em
+    }
+    
+    #mop_holder input {
+      border-radius: 8px;
+      margin: 2px;
+      padding: 7px;
+      width: 90%;
+      border: solid 1px gray
+    }
+    
+    #mop_holder .mop_form-row {
+      padding: 3px;
+    }
+    
+    #mop_holder a.mop_close {
+      position: absolute;
+      top: 10px;
+      right: 15px;
+    }
+    
+    #mop_holder .mop_text {
+      margin-top: 20px;
+      color: white;
+      font-size: 18px;
+      line-height: 130%
+    }
+    
+    #mop_holder .mop_footer {
+      font-size: 12px;
+      color: white;
+      text-align: center
+    }
+    
+    #mop_holder .mop_header {
+      margin: 5px 30px;
+      padding: 10px;
+      font-size: 14px;
+      color: black;
+      text-align: center;
+      background: #ffc000;
+      border: solid 1px #f79646;
+      font-weight: bold;
+      border-radius: 4px;
+    }
+    
+    #mop_holder .buynow {
+      margin: 0 !important
+    }
+    
+    @media (max-width: 1000px) {
+      #mop_holder {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+<section class="header" id="header">
+  <div class="container"><img src="images/logo.png" alt="">
+    <h1>СТАНИ ИСТИНСКИ ЖРЕБЕЦ!</h1>
+  </div>
+</section>
+<section class="include">
+  <div class="container">
+    <h2>Активирайте мощната си потентност на всяка възраст</h2>
+    <h3>Първият естествен активатор на естествената потентност без вреда за здравето и без странични ефекти</h3>
+    <div class="wrapper">
+      <div class="left">
+        <ul>
+          <li>Твърда и трайна ерекция</li>
+          <li>Силно сексуално желание</li>
+          <li>Издръжливост и контрол на еякулацията</li>
+        </ul>
+        <div class="quality">
+          <p>TestoY подобрява качеството на сексуалния живот на милиони мъже</p>
+          <b>СЕГА И В БЪЛГАРИЯ!</b>
+        </div>
+      </div>
+      <form action="" class="al-form"
+            method="post">
+        <input type="hidden" name="test" value="0">
+        <select name="country_code" style="display: none;">
+          <option value="BG">Bulgaria</option>
+        </select>
+        <h4>Попълнете формуляра и научете повече!</h4>
+        <div class="price">
+          <p>Стара цена: <span class="al-cost-promo">75 ЛВ</span></p>
+          <p>Нова цена: <span class="al-cost">37.5 ЛВ</span></p>
+        </div>
+        <div class="input-wrapper">
+          <input id="name1" name="name" placeholder="ИМЕ" type="text" class="order_data required" value=""
+                 required="required">
+          <label for="name1"></label>
+        </div>
+        <div class="input-wrapper">
+          <input id="phone1" name="phone" placeholder="Телефон" type="tel" class="order_data required" value=""
+                 required="required" minlength="5" maxlength="17">
+          <label for="phone1"></label>
+        </div>
+        <button type="submit" class="buynow" data-pid="69" data-campaign-uri="430810">Поръчай</button>
+        <b>Останали опаковки от промоцията: <span class="js-countdown">15</span></b>
+      
+      </form>
+    </div>
+  </div>
+</section>
+<section class="proven">
+  <div class="container">
+    <div class="wrapper">
+      <h2>Доказано е:</h2>
+      <h3>78% от мъжете биха искали да подобрят качеството на сексуалния си живот</h3>
+      <p>Мъжете, които са опитали TestoY, са във възторг от неговото действие.</p>
+      <p>TestoY снабдява мъжкия организъм с всички необходими елементи за по-добра сексуална активност на всякаква
+        възраст.</p>
+      <p>При курс на терапия положителния резултат не е ограничен във времето.</p>
+    </div>
+  </div>
+</section>
+<section class="advantages">
+  <div class="container">
+    <h2>Защо си струва да използвате TestoY?</h2>
+    <ul>
+      <li><img src="images/advantages-img1.jpg" alt="">
+        <p>За да бъдете в леглото като истински жребец</p>
+      </li>
+      <li><img src="images/advantages-img2.jpg" alt="">
+        <p>Да имате много добър секс във връзката си</p>
+      </li>
+      <li><img src="images/advantages-img3.jpg" alt="">
+        <p>Увереност в своите сили — Вие ще сте готови във всеки един момент!</p>
+      </li>
+      <li><img src="images/advantages-img4.jpg" alt="">
+        <p>За да правите продължително време секс - Вие ще сте супер мъжкар</p>
+      </li>
+      <li><img src="images/advantages-img5.jpg" alt="">
+        <p>Активира доминантното поведение: решителност, страст, мотивация</p>
+      </li>
+      <li><img src="images/advantages-img6.jpg" alt="">
+        <p>Безопасно и няма негативни странични ефекти</p>
+      </li>
+    </ul>
+    <div class="interception">
+      <p>Енергия, потентност, контрол върху еякулацията, либидо и дори здравословна агресивност — всичко, което е нужно
+        на съвременния човек в една капсула и без странични ефекти</p>
+    </div>
+  </div>
+</section>
+<section class="trust">
+  <div class="container">
+    <h2>TestoY е спечелил доверието!</h2>
+    <h3>Три национални награди, 95,5% положителни отзиви</h3>
+    <ul>
+      <li><img src="images/trust-img1.png" alt="">
+        <p>Няма противопоказания и странични ефекти</p>
+      </li>
+      <li><img src="images/trust-img2.png" alt="">
+        <p>Може да се използва с алкохол и фармацевтични препарати</p>
+      </li>
+      <li><img src="images/trust-img3.png" alt="">
+        <p>Може да се използва на всяка възраст</p>
+      </li>
+      <li><img src="images/trust-img4.png" alt="">
+        <p>Укрепва сърдечния мускул. Поддържа безопасно ниво на кръвното налягане</p>
+      </li>
+      <li><img src="images/trust-img5.png" alt="">
+        <p>Напълно естествен, не съдържа синтетични добавки</p>
+      </li>
+      <li><img src="images/trust-img6.png" alt="">
+        <p>Високата му ефикасност е доказана от клинични изследвания</p>
+      </li>
+    </ul>
+    <div class="wrapper">
+      <div class="left">
+        <div class="quality">
+          <p>TestoY подобрява качеството на сексуалния живот на милиони мъже</p>
+          <b>СЕГА И В БЪЛГАРИЯ!</b>
+        </div>
+      </div>
+      <form action="" class="al-form"
+            method="post">
+        <input type="hidden" name="test" value="0">
+        <select name="country_code" style="display: none;">
+          <option value="BG">Bulgaria</option>
+        </select>
+        <h4>Попълнете формуляра и научете повече!</h4>
+        <div class="price">
+          <p>Стара цена: <span class="al-cost-promo">75 ЛВ</span></p>
+          <p>Нова цена: <span class="al-cost">37.5 ЛВ</span></p>
+        </div>
+        <div class="input-wrapper">
+          <input id="name2" name="name" placeholder="ИМЕ" type="text" class="order_data required" value=""
+                 required="required">
+          <label for="name2"></label>
+        </div>
+        <div class="input-wrapper">
+          <input id="phone2" name="phone" placeholder="Телефон" type="tel" class="order_data required" value=""
+                 required="required" minlength="5" maxlength="17">
+          <label for="phone2"></label>
+        </div>
+        <button type="submit" class="buynow" data-pid="69" data-campaign-uri="430810">Поръчай</button>
+        <b>Останали опаковки от промоцията: <span class="js-countdown">15</span></b>
+      
+      </form>
+    </div>
+  </div>
+</section>
+<section class="help">
+  <div class="container">
+    <h2>Едни от често срещаните интимни ситуации, в които гарантирано TestoY ще Ви помогне</h2>
+    <ul>
+      <li><img src="images/help-img1.jpg" alt="">
+        <p>Проблеми с постигането на ерекция</p>
+      </li>
+      <li><img src="images/help-img2.jpg" alt="">
+        <p>Нестабилна ерекция</p>
+      </li>
+      <li><img src="images/help-img3.jpg" alt="">
+        <p>Трудности с ерекцията след пиене на алкохол</p>
+      </li>
+      <li><img src="images/help-img4.jpg" alt="">
+        <p>Страх от интимност (психологическа импотентност)</p>
+      </li>
+      <li><img src="images/help-img5.jpg" alt="">
+        <p>Преждевременна еякулация</p>
+      </li>
+    </ul>
+  </div>
+</section>
+<section class="longer">
+  <div class="container">
+    <div class="wrap">
+      <p>С TestoY ще можете <br/>по-дълго и повече!</p>
+      <a href="#fill" class="button event_anchor1">Вземи</a>
+    </div>
+  </div>
+</section>
+<section class="result">
+  <div class="container">
+    <h2>ИСТИНСКИ ИСТОРИИ, <span>ЗАВИДНИ РЕЗУЛТАТИ</span>
+    </h2>
+    <h3>Повече от 100 000 мъже ни повериха най-важното и остават възхитени от резултатите.<br>
+      TestoY — капсули за мъже №1 в България.</h3>
+    <div class="wrap">
+      <div class="prod"><img src="images/product.png" alt=""></div>
+      <div class="reviews">
+        <div class="filters">
+          <div class="btn-man">отзиви на мъже</div>
+          <div class="btn-woman">отзиви на жени</div>
+        </div>
+        <div class="review">
+          <div class="man-rev" style="display:none">
+            <div class="man">
+              <p>Мислех се, че по отношение на секса всичко е ок, хубавец съм. Но след като опитах TestoY, разбрах,
+                колко много съм се надценявал. Сега вече знам, на какво съм способен в действителност! И моята приятелка
+                също)). Ние сме направо шокирани, в добрия смисъл на думата)</p>
+              <p>Антон, гр. Плевен</p>
+            </div>
+            <div class="man">
+              <p>Тези, които се опитвали стария TestoY, знаят колко добре действа на ерекцията. Но новият TestoY – е
+                нещо страхотно! И за дълго време. На мен една капсула ми стига за цяла нощ, пия преди интимност. Жена ми
+                вика, че имаме втори меден месец.</p>
+              <p>Васил, гр. Свищов</p>
+            </div>
+            <div class="man">
+              <p>Ако имам проблем със секса и нещо подобно, тези капсули помагат. А и като цяло просто за нови
+                впечатления можете да вземете новия. Ставаш като секс машина за цяла нощ.</p>
+              <p>Атанас, гр. Враца</p>
+            </div>
+            <div class="man">
+              <p>Ефектът е доста добър и идва доста бързо, и добре се държи. Може да се взема и еднократно, ако искате
+                да разнообразите своя сексуален живот, да получите нови усещания, така да се каже. При проблеми също е
+                много подходящ, перфектно ги решава. Взех за себе си и за баща си. Всичко работи.</p>
+              <p>Илия, гр.София</p>
+            </div>
+            <div class="man">
+              <p>Ще оценя с 6-ца този метод! В сравнение с всички лекарства, които опитах, TestoY е най-добрият. Нямам
+                проблеми в интимния живот вече цяла година, а по-рано почти стигнах до развод.</p>
+              <p>Николай, гр. Стара Загора</p>
+            </div>
+            <div class="man">
+              <p>TestoY ми препоръча един лекар (моя съсед на вилата). След два месеца на терапия, мога да кажа, че
+                лекарството работи. Стопанството ми стои като щик.</p>
+              <p>Станимир, гр. Варна</p>
+            </div>
+            <div class="man">
+              <p>Натъкнах се на него в аптеката преди около месец, от тогава го взимам (имам някои проблеми в леглото, а
+                съм на 36 години). TestoY действа доста бързо и най-важното - ефикасно. Силно повишава сексуалното
+                желание, дори жена ми, с която живеем вече 9 години, я възприемам по съвсем нов начин.</p>
+              <p>Даниела, гр. Благоевград</p>
+            </div>
+          </div>
+          <div class="woman-rev active">
+            <div class="woman">
+              <p>Приятелят ми взима TestoY, въпреки че нямаме проблеми със секса. И двамата сме млади, и здрави. Какво
+                мога да кажа по този въпрос? Ако не ги пиеше сам, щях сама да го моля за това))). Много добро средство,
+                жените ще ме разберат.</p>
+              <p>Евгения, гр. Русе</p>
+            </div>
+            <div class="woman">
+              <p>Заради стресът на работа, мъжът ми получи проблеми в тази област. А сега, с този препарат, всичко
+                работи перфектно! И дори сексът стана в пъти по-добър, пък и той се чувства много добре. Сега вече сам
+                си купува, по моя молба</p>
+              <p>Ани, гр. Монтана</p>
+            </div>
+            <div class="woman">
+              <p>Взех TestoY за мъжа си, все пак препарата е проверен. Сексът ни сега е страхотен! макар че е изпил само
+                половина от курса на терапията.</p>
+              <p>Надежда, Созопол</p>
+            </div>
+            <div class="woman">
+              <p>Чудесно лекарство! Опитахме го миналата седмица с моя приятел, за да разнообразим усещанията. Ефектът е
+                страхотен - първо, нямаше никакви проблеми с ерекцията, и второ, действието на препарата е доста
+                продължително, в процеса нищо не отслабва.</p>
+              <p>Теодора, гр. Бургас</p>
+            </div>
+            <div class="woman">
+              <p>Мъжът ми наскоро навърши 44 години. С личният ни живот всичко е наред. Затова мъжът ми взема TestoY,
+                така да се каже, по моя молба). Просто на мен много ми харесва как работят тези капсули!! Ако цената
+                остане същата, съпругът ми определено ще продължи да взима тези хапчета.</p>
+              <p>Лилия, Търговище</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="expert">
+  <div class="container">
+    <div class="doctor"><img src="images/expert-doc.jpg" alt="">
+      <div>
+        <p>Славчо Митев<br>
+          <span>Независимият експерт</span>
+        </p>
+        <img src="images/expert-sign.png" alt="">
+      </div>
+    </div>
+    <div class="content">
+      <p>TestoY е уникално ефективно средство за възстановяване на мъжката сила и предотвратяване на импотентността,
+        поне въз основа на състава си.</p>
+      <p>Всички знаят за бабините зъби, перуанския мак и гуараната! Всяка порция гарантирано съдържа съдържа най-силните
+        природни съставки за здравето на мъжете, които работят синхронно в препарата TestoY и увеличават ефекта един на
+        друг, което води не само до постоянна ерекция, но и поддържа здравето като цяло.</p>
+      <p>За разлика от химическите препарати, TestoY е напълно естествен и не причинява вреда на организма. Освен
+        възстановяване на силата и подобряване на сексуалните възможности, лекарството стимулира имунната система,
+        подобрява общото здравословно състояние, премахва умствената и физическа умора, повишава ефективността, спомага
+        за увеличаване на мускулната маса.</p>
+      <p>Очевидно е, че силен резултат е възможен само при курсово лечение. В зависимост от целите и проблемите,
+        препоръките за приемане на препарата, могат да бъдат следните: поддръжка и профилактика - препоръчва се
+        минимален курс от 4-6 седмици, за възстановяване - двоен курс от 4-12 седмици.</p>
+      <p>За да удължите ефекта, лечението задължително трябва да се повтори в рамките на една година.</p>
+    </div>
+  </div>
+</section>
+<section class="fabricator">
+  <div class="container">
+    <div class="wrap">
+      <div><img src="images/fabricator-img1.jpg" alt="">
+        <h2>ЗА ПРОИЗВОДИТЕЛЯ:</h2>
+        <p>Официалният производител е на пазара повече от 20 години. Гарантира най-високо качество на лицензирано
+          производство и съхранение на продуктите, както и бърза и поверителна доставка на клиентите.</p>
+      </div>
+      <div><img src="images/fabricator-img2.jpg" alt="">
+        <h2>TestoY В БЪЛГАРИЯ:</h2>
+        <ul>
+          <li>Одобрен е от от експертния съвет на Изпълнителната агенция по лекарствата и препоръчан на българските
+            специалисти
+          </li>
+          <li>Съдържа само качествени натурални съставки. Всяка партида суровини преминава контрол на качеството в
+            независима лаборатория
+          </li>
+          <li>Действието на всяка съставка, включена в състава на формулата е потвърдена от научни изследвания</li>
+          <li>Произведен, опакован и се съхранява в съответствие с европейските стандарти и изискванията за лицензиране
+            на производителя
+          </li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+<section class="reliance">
+  <div class="container">
+    <div>
+      <h2>Ние сме горди, че вече повече от 100 000 мъже ни повериха най-важното си</h2>
+    </div>
+  </div>
+</section>
+<section class="fill" id="fill">
+  <div class="container">
+    <div class="wrapper">
+      <div class="left">
+        <h2>Моля, попълнете формуляра за поръчка на нашия сайт, докато е валидна промоцията, и ще получите TestoY <span
+          class="al-cost">37.5 ЛВ</span>
+        </h2>
+        <div class="quality">
+          <p>TestoY подобрява качеството на сексуалния живот на милиони мъже</p>
+          <b>СЕГА И В БЪЛГАРИЯ!</b>
+        </div>
+      </div>
+      <div>
+        <form action="" class="al-form"
+              method="post">
+          <input type="hidden" name="test" value="0">
+          <select name="country_code" style="display: none;">
+            <option value="BG">Bulgaria</option>
+          </select>
+          <h4>Попълнете формуляра и научете повече!</h4>
+          <div class="price">
+            <p>Стара цена: <span class="al-cost-promo">75 ЛВ</span></p>
+            <p>Нова цена: <span class="al-cost">37.5 ЛВ</span></p>
+          </div>
+          <div class="input-wrapper">
+            <input id="name3" name="name" placeholder="ИМЕ" type="text" class="order_data required" value=""
+                   required="required">
+            <label for="name3"></label>
+          </div>
+          <div class="input-wrapper">
+            <input id="phone3" name="phone" placeholder="Телефон" type="tel" class="order_data required" value=""
+                   required="required" minlength="5" maxlength="17">
+            <label for="phone3"></label>
+          </div>
+          <button type="submit" class="buynow" data-pid="69" data-campaign-uri="430810">Поръчай</button>
+          <b>Останали опаковки от промоцията: <span class="js-countdown">15</span></b>
+        
+        </form>
+        <p class="secure"> Гарантираме Ви бърза и поверителна доставка </p>
+      </div>
+    </div>
+  </div>
+</section>
+
+
+<!-- Global bottom body code -->
+
+<!--  REPLACE PLACEHOLDERS -->
+<script>
+  $(document).ready(function () {
+    try {
+      var country_codeValue = $("body").find(`select[name="country_code"]`).val();
+      console.log(country_codeValue);
+      // Replace placeholder name
+      nameField = document.getElementsByName("name");
+      nameField.forEach(namePlaceholder => {
+        if (countriesTranslationObject[country_codeValue]) {
+          namePlaceholder.placeholder = (countriesTranslationObject[country_codeValue]["name"]);
+        } else {
+          namePlaceholder.placeholder = (countriesTranslationObject["all"]["name"]);
+          console.error("Country for name placeholder does not exist in the settings");
+        }
+      });
+
+      // Replace placeholder phone
+      phoneField = document.getElementsByName("phone");
+      phoneField.forEach(phonePlaceholder => {
+        if (countriesTranslationObject[country_codeValue]) {
+          phonePlaceholder.placeholder = (countriesTranslationObject[country_codeValue]["phone"]);
+        } else {
+          phonePlaceholder.placeholder = (countriesTranslationObject["all"]["phone"]);
+          console.error("Country for phone placeholder does not exist in the settings");
+        }
+      })
+    } catch (err) {
+      console.warn("Cannot find country code")
+    }
+  });
+</script>
+<!-- END REPLACE PLACEHOLDERS -->
+
+<style>
+  
+  html {
+    scroll-behavior: smooth;
+  }
+  
+  .modal {
+    display: block;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+  }
+  
+  .error_modal_title {
+    border-bottom: 1px solid red;
+  }
+  
+  .error_modal_text {
+    text-align: center;
+    font-size: 25px;
+  }
+  
+  .modal-content {
+    background-color: #fefefe;
+    margin: 15% auto;
+    padding: 20px;
+    border: 1px solid #888;
+    width: 80%;
+  }
+  
+  .close {
+    color: #aaa;
+    float: right;
+    font-size: 28px;
+    font-weight: bold;
+  }
+  
+  .close:hover,
+  .close:focus {
+    color: black;
+    text-decoration: none;
+    cursor: pointer;
+  }
+  
+  .footer-wrapper {
+    text-align: center;
+    font-size: 12px;
+    padding: 5px 10px;
+    color: #858585;
+    padding-top: 15px;
+    background-color: #cecece6e;
+    font-weight: 400 !important;
+  }
+  
+  .footer-wrapper a {
+    color: black;
+    text-decoration: none;
+  }
+  
+  .footer-wrapper a:hover {
+    color: #2a2a2a
+  }
+  
+  .footer-wrapper a:visited {
+    color: #2a2a2a
+  }
+  
+  .footer-inner-wrapper {
+  }
+  
+  .post-footer-wrapper {
+    font-size: 14px;
+    text-align: center;
+    padding: 3px 10px;
+    color: #858585;
+    background-color: #cecece6e;
+  }
+</style>
+
+
+<div class="footer-wrapper" id="footerExistsHere">
+  <div class="footer-inner-wrapper">* By clicking the "order" button you confirm that you have read Privacy Policy and
+    give your consent to the processing of your personal data © 2024 Copyright. All rights reserved.
+    <div class="footer-links-wrapper"><a class="force-default" href="#fill">Privacy
+      policy</a> | <a class="force-default" href="#fill">Disclaimer</a> | <a
+      class="force-default" href="#fill">Terms and conditions</a></div>
+  </div>
+</div>
+
+
+<!-- Маска для номера -->
+<link rel="stylesheet" href="intlTelInput.css" />
+<style>
+  div.iti {
+    width: 100%;
+    height: 100%;
+  }
+  div.iti ul.iti__country-list {
+    max-height: 80vh;
+  }
+
+  .iti__flag-container {
+    display: none;
+  }
+</style>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/intlTelInput.js"
+        integrity="sha512-GKEK9SOXk4P4vIduy3P9BwkLvOHoFuGBtGnmVIF5StxOE0ZavtF5Q06+fmUJq2ePMVm/E4us1ISOAoPc2ZMYVQ=="
+        crossorigin="anonymous" referrerpolicy="no-referrer"></script>
+<script>
+  const country = "BG" // здесь указываем страну для валидации
+
+  const phoneInputs = document.querySelectorAll('input[name="phone"]')
+  for (let i = 0; i < phoneInputs.length; i++) {
+    let phoneInput = phoneInputs[i]
+    let inp = intlTelInput(phoneInput, {
+      initialCountry: country,
+      autoFormat: true,
+      nationalMode: false,
+      allowDropdown: false,
+      utilsScript: "https://cdnjs.cloudflare.com/ajax/libs/intl-tel-input/17.0.19/js/utils.js"
+    });
+
+    // Если поле пустое, добавляем при клике код гео
+    phoneInput.addEventListener('focus', function (event) {
+      if (phoneInput.value.length === 0) {
+        countryData = inp.getSelectedCountryData()
+        dialCode = countryData.dialCode
+        //phoneInput.value = "+" + dialCode
+      }
+    })
+
+    phoneInput.addEventListener('input', function (event) {
+      //phoneInput.value = phoneInput.value.replace(/[^0-9+]/g, '')
+    })
+  }
+</script>
+<!-- end -->
+
+<!-- Скрипт для сабов и антитреш -->
+<script type="text/javascript">
+  // Отключение кнопок отправки формы
+  function disableSubmitBtns() {
+    const submitBtnList = document.querySelectorAll('[type=submit]')
+    for (let i = 0; i < submitBtnList.length; i++) {
+      let submitBtn = submitBtnList[i]
+      submitBtn.disabled = true
+      submitBtn.style.opacity = "0.7"
+      submitBtn.style.pointerEvents = 'none'
+    }
+  }
+
+  const urlParams = new URLSearchParams(window.location.search);
+  var pixel = urlParams.has('pixel') ? urlParams.get('pixel') : (urlParams.has('px') ? urlParams.get('px') : false);
+
+  // Новые сабы
+  const pixelInput = document.createElement('input')
+  pixelInput.type = 'hidden';
+  pixelInput.name = 'px';
+  pixelInput.value = pixel;
+
+  const subidInput = document.createElement('input')
+  subidInput.type = 'hidden';
+  subidInput.name = 'subid';
+  subidInput.value = '{subid}'
+
+  // Добавляем новые сабы в каждую форму + запись в куки при отправке формы
+  const forms_list = document.getElementsByTagName('form')
+  for (let i = 0; i < forms_list.length; i++) {
+    let form = forms_list[i]
+    console.log(form)
+    form.action = "order.php"
+    form.method = "POST"
+    form.appendChild(subidInput.cloneNode(true))
+    form.appendChild(pixelInput.cloneNode(true))
+    form.addEventListener('submit', function (event) {
+      let phoneInp = form.querySelector('input[name="phone"]')
+      if (phoneInp.value.length < 9) {
+        event.preventDefault()
+        return false;
+      }
+      document.cookie = "lead=lead;max-age=2678400"
+      disableSubmitBtns()
+    })
+  }
+
+  // Проверка записи в куки
+  const c = document.cookie.match(/lead=(.+?)(;|$)/)
+  if (c) {
+    if (c[1] == 'lead') {
+      //disableSubmitBtns()
+    }
+  }
+</script>
+<!-- end -->
+
+<?php
+$pixelCode = isset($_GET['pixel']) ? $_GET['pixel'] : (isset($_GET['px']) ? $_GET['px'] : false);
+if ($pixelCode) : ?>
+  <!--  Facebook  -->
+  <script>
+    !function (f, b, e, v, n, t, s) {
+      if (f.fbq) return;
+      n = f.fbq = function () {
+        n.callMethod ?
+          n.callMethod.apply(n, arguments) : n.queue.push(arguments)
+      };
+      if (!f._fbq) f._fbq = n;
+      n.push = n;
+      n.loaded = !0;
+      n.version = '2.0';
+      n.queue = [];
+      t = b.createElement(e);
+      t.async = !0;
+      t.src = v;
+      s = b.getElementsByTagName(e)[0];
+      s.parentNode.insertBefore(t, s)
+    }(window, document, 'script', '//connect.facebook.net/en_US/fbevents.js');
+    fbq('init', <?php echo $pixelCode; ?>);
+    fbq('track', 'PageView', {}, {eventID: '{subid}'});
+  </script>
+  <noscript><img height="1" width="1" src="//www.facebook.com/tr?id={px}&ev=PageView&noscript=1&eid={subid}"/>
+  </noscript>
+<?php endif; ?>
+<!--  Facebook  -->
+
+</body>
+</html>
